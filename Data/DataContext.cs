@@ -1,4 +1,4 @@
-﻿using Hospital.Model;
+﻿using Hospital.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hospital.Data

@@ -1,4 +1,4 @@
-﻿namespace Hospital.Model
+﻿namespace Hospital.Entities
 {
     public class Doctor
     {
@@ -9,7 +9,7 @@
 
         public List<Patient> Patients { get; set; }
 
-        public long PatientId { get; set; }
+        public long PatientsId { get; set; }
 
     }
 }

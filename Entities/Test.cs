@@ -1,8 +1,8 @@
-﻿namespace Hospital.Model
+﻿namespace Hospital.Entities
 {
     public class Test
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
 

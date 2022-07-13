@@ -4,7 +4,7 @@
 
 namespace Hospital.Migrations
 {
-    public partial class Step_1 : Migration
+    public partial class addtable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,8 @@ namespace Hospital.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SutySystemCode = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Lastname = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Lastname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PatientsId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,8 +47,9 @@ namespace Hospital.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Lastname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NationalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Mobile = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    NationalCode = table.Column<long>(type: "bigint", nullable: false),
+                    Mobile = table.Column<long>(type: "bigint", nullable: false),
+                    DoctersId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -58,7 +60,7 @@ namespace Hospital.Migrations
                 name: "Tests",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<int>(type: "int", nullable: false)
@@ -67,21 +69,53 @@ namespace Hospital.Migrations
                 {
                     table.PrimaryKey("PK_Tests", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "DoctorPatient",
+                columns: table => new
+                {
+                    DoctorsId = table.Column<long>(type: "bigint", nullable: false),
+                    PatientsId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DoctorPatient", x => new { x.DoctorsId, x.PatientsId });
+                    table.ForeignKey(
+                        name: "FK_DoctorPatient_Doctors_DoctorsId",
+                        column: x => x.DoctorsId,
+                        principalTable: "Doctors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DoctorPatient_Patients_PatientsId",
+                        column: x => x.PatientsId,
+                        principalTable: "Patients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DoctorPatient_PatientsId",
+                table: "DoctorPatient",
+                column: "PatientsId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Doctors");
+                name: "DoctorPatient");
 
             migrationBuilder.DropTable(
                 name: "Insurances");
 
             migrationBuilder.DropTable(
-                name: "Patients");
+                name: "Tests");
 
             migrationBuilder.DropTable(
-                name: "Tests");
+                name: "Doctors");
+
+            migrationBuilder.DropTable(
+                name: "Patients");
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Hospital.Model
+﻿namespace Hospital.Entities
 {
     public class Insurance
     {
