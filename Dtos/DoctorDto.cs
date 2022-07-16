@@ -1,4 +1,6 @@
-﻿namespace Hospital.Dtos
+﻿using Hospital.Entities;
+
+namespace Hospital.Dtos
 {
     public class DoctorDto
     {
@@ -7,7 +9,15 @@
         public string Name { get; set; }
         public string Lastname { get; set; }
 
-       
+        public List<Patient> Patients { get; set; }
+
+    }
+
+    public class DoctorListAndPatientCount
+    {
+        public int Count { get; set; }
+        public List<Patient> Patients { get; set; }
+        
     }
 
     public class CreateDoctorDto

@@ -33,16 +33,35 @@ namespace Hospital.Controllers
             return Ok(_mapper.Map<IEnumerable<PatientDto>>(patient));
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetPatientByIdAsync([FromRoute]long Id)
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetPatientByIdAsync(long id)
+        //{
+        //    var patient = await _IpatientRepository.GetPatientByIdAsync(id);
+        //    if (patient == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(patient);
+        //}
+
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<PatientDto>> GetPatientByIdAsync(long Id)
         {
-            var patient = await _IpatientRepository.GetPatientByIdAsync(Id);
-            if (patient == null)
-            {
-                return NotFound();
-            }
-            return Ok(patient);
+            var item = await _context.Patients
+                .Where(p => p.Id == Id)
+                .Select(s => new
+                {
+                    s.Doctors,
+                })
+                .Include(t => t.Doctors)
+                
+                .ToListAsync();
+
+            return Ok(item);
+
         }
+
+
 
         [HttpPost]
         public async Task<ActionResult<List<CreatePatientDto>>> Addpatient(CreatePatientDto createpatientDto)

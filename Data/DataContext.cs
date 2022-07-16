@@ -14,5 +14,13 @@ namespace Hospital.Data
         public DbSet<Insurance> Insurances { get;set;}
         public DbSet<Patient> Patients { get;set;}
         public DbSet<Test> Tests { get;set;}
+        public DbSet<Reception> Receptions { get;set;}
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<Doctor>().HasMany(x => x.Patients).WithMany();
+        //}
+
+       
     }
 }

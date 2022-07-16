@@ -26,8 +26,8 @@ namespace Hospital.Controllers
             return Ok(await _context.Insurances.ToListAsync());
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Insurance>> GetById(long Id)
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<InsuranceDto>> GetById(long Id)
         {
             var insurance = await _context.Insurances.FindAsync(Id);
             if (insurance == null)
@@ -38,17 +38,25 @@ namespace Hospital.Controllers
         [HttpPost]
         public async Task<ActionResult<List<CreateInsuranceDto>>> AddDoctor(CreateInsuranceDto createInsuranceDto)
         {
-            var docter = new Insurance()
+            
+            var item = new Insurance()
             {
 
                 Name = createInsuranceDto.Name,
                 Discount = createInsuranceDto.Discount,    
+                
                 DiscountCeiling = createInsuranceDto.DiscountCeiling,
 
             };
+            
+            if(item.Discount > item.DiscountCeiling)
+            {
+                item.Discount = item.DiscountCeiling;
+            }
+           
 
-
-            _context.Insurances.Add(docter);
+            
+            _context.Insurances.Add(item);
             await _context.SaveChangesAsync();
             return Ok(await _context.Insurances.ToListAsync());
         }

@@ -44,11 +44,18 @@ namespace Hospital.Repository
 
         public async Task<PatientDto> GetPatientByIdAsync(long Id)
         {
-            //var patient = _context.Patients.Where(p => p.Id == Id).SingleOrDefault();
-            //return await Task.FromResult(patient);
-            var patient = await _context.Patients.FindAsync(Id);
+            //var item = await _context.Patients
+            //    .Where(p => p.Id == Id)
+            //    .Include(p => p.Doctors)
 
-            return _mapper.Map<PatientDto>(patient);
+            //    .ToListAsync();
+
+            //return _mapper.Map<PatientDto>(item);
+
+            throw new NotImplementedException();
+
+
+
         }
     }
 }

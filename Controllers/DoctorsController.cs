@@ -22,18 +22,48 @@ namespace Hospital.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<DoctorDto>>> Get()
+        public async Task<ActionResult<List<Doctor>>> Get()
         {
             return Ok(await _context.Doctors.ToListAsync());
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Doctor>> GetById (long Id)
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<DoctorDto>> GetById (long Id)
         {
-            var doctor = await _context.Doctors.FindAsync(Id);
+            var doctor = await _context.Doctors
+                .Where(t=>t.Id == Id)
+                .ToListAsync();
             if (doctor == null)
                 return BadRequest("Docter not found");
-            return Ok(_mapper.Map<DoctorDto>(doctor));
+            return Ok(doctor);
+        }
+
+        [HttpGet("id")]
+        public async Task<ActionResult<DoctorDto>> ShowPationListByDoctorLastName(string id)
+        {
+            var patientList = await _context.Doctors
+                .Include(t => t.Patients)
+                .Where(t => t.Lastname.Contains(id))
+                .ToListAsync();
+            if (patientList == null)
+                return BadRequest("Docter not found");
+            return Ok(patientList);
+
+        }
+
+        [HttpGet("id")]
+        public async Task<ActionResult<DoctorDto>> ShowDoctorListAndPatientCount(string id)
+        {
+            var patientList = await _context.Doctors
+                .Include(t => t.Patients)
+             
+              
+                .ToListAsync();
+
+            if (patientList == null)
+                return BadRequest("Docter not found");
+            return Ok(patientList);
+
         }
 
         [HttpPost]

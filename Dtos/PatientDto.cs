@@ -1,5 +1,6 @@
 ﻿using Hospital.Entities;
 
+
 namespace Hospital.Dtos
 {
     public class PatientDto
@@ -11,11 +12,13 @@ namespace Hospital.Dtos
         public long NationalCode { get; set; }
 
         public long Mobile { get; set; }
+       
+      
 
-        public List<Doctor> Doctors { get; set; }
 
-        public long DoctersId { get; set; }
     }
+
+
 
     public class CreatePatientDto
     {

@@ -4,6 +4,7 @@ using Hospital.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hospital.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220714150051_EditTest_ReceptionTBL")]
+    partial class EditTest_ReceptionTBL
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +23,6 @@ namespace Hospital.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("DoctorPatient", b =>
-                {
-                    b.Property<long>("DoctorsId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("PatientsId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("DoctorsId", "PatientsId");
-
-                    b.HasIndex("PatientsId");
-
-                    b.ToTable("DoctorPatient");
-                });
 
             modelBuilder.Entity("Hospital.Entities.Doctor", b =>
                 {
@@ -59,6 +46,29 @@ namespace Hospital.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Doctors");
+                });
+
+            modelBuilder.Entity("Hospital.Entities.Doctor_Patient", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<long>("DoctorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("PatientId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("Doctor_Patient");
                 });
 
             modelBuilder.Entity("Hospital.Entities.Insurance", b =>
@@ -119,34 +129,19 @@ namespace Hospital.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<long>("DoctorId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("DoctorName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("InsuranceId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("InsuranceName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("PatientId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("PatientName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DoctorId");
-
-                    b.HasIndex("InsuranceId");
-
-                    b.HasIndex("PatientId");
 
                     b.ToTable("Receptions");
                 });
@@ -166,7 +161,10 @@ namespace Hospital.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
-                    b.Property<long?>("ReceptionId")
+                    b.Property<long>("ReceptionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ReseptionId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -176,60 +174,49 @@ namespace Hospital.Migrations
                     b.ToTable("Tests");
                 });
 
-            modelBuilder.Entity("DoctorPatient", b =>
-                {
-                    b.HasOne("Hospital.Entities.Doctor", null)
-                        .WithMany()
-                        .HasForeignKey("DoctorsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Hospital.Entities.Patient", null)
-                        .WithMany()
-                        .HasForeignKey("PatientsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Hospital.Entities.Reception", b =>
+            modelBuilder.Entity("Hospital.Entities.Doctor_Patient", b =>
                 {
                     b.HasOne("Hospital.Entities.Doctor", "Doctor")
-                        .WithMany()
+                        .WithMany("Doctor_Patients")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Hospital.Entities.Insurance", "Insurance")
-                        .WithMany()
-                        .HasForeignKey("InsuranceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Hospital.Entities.Patient", "Patient")
-                        .WithMany()
+                    b.HasOne("Hospital.Entities.Patient", "patient")
+                        .WithMany("Doctor_Patients")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Doctor");
 
-                    b.Navigation("Insurance");
-
-                    b.Navigation("Patient");
+                    b.Navigation("patient");
                 });
 
             modelBuilder.Entity("Hospital.Entities.Test", b =>
                 {
                     b.HasOne("Hospital.Entities.Reception", "Reception")
-                        .WithMany("Tests")
-                        .HasForeignKey("ReceptionId");
+                        .WithMany("tests")
+                        .HasForeignKey("ReceptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Reception");
                 });
 
+            modelBuilder.Entity("Hospital.Entities.Doctor", b =>
+                {
+                    b.Navigation("Doctor_Patients");
+                });
+
+            modelBuilder.Entity("Hospital.Entities.Patient", b =>
+                {
+                    b.Navigation("Doctor_Patients");
+                });
+
             modelBuilder.Entity("Hospital.Entities.Reception", b =>
                 {
-                    b.Navigation("Tests");
+                    b.Navigation("tests");
                 });
 #pragma warning restore 612, 618
         }

@@ -2,6 +2,7 @@
 using Hospital.Data;
 using Hospital.Dtos;
 using Hospital.Entities;
+using Hospital.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,43 +15,35 @@ namespace Hospital.Controllers
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        public TestsController(DataContext context, IMapper mapper)
+        private readonly ITestRepository _ItestRepository;
+        public TestsController(DataContext context, IMapper mapper , ITestRepository testRepository)
         {
             _context = context;
             _mapper = mapper;
+            _ItestRepository = testRepository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<TestDto>>> Get()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(await _context.Tests.ToListAsync());
+           var result = await _ItestRepository.GetAllTestAsync();
+            return Ok(result);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Test>> GetById(long Id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetById(long Id)
         {
-            var test = await _context.Tests.FindAsync(Id);
-            if (test == null)
-                return BadRequest("Docter not found");
-            return Ok(_mapper.Map<TestDto>(test));
+            var result = await _ItestRepository.GetTestByIdAsync(Id);
+            if (result == null)
+                return NotFound();
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<CreateTestDto>>> AddDoctor(CreateTestDto createTestDto)
+        public async Task<IActionResult> Add(CreateTestDto createTestDto)
         {
-            var docter = new Test()
-            {
-
-                Name = createTestDto.Name,
-                Price = createTestDto.Price,
-                
-
-            };
-
-
-            _context.Tests.Add(docter);
-            await _context.SaveChangesAsync();
-            return Ok(await _context.Tests.ToListAsync());
+            var id = await _ItestRepository.AddTestAsync(createTestDto);
+            return CreatedAtAction(nameof(GetById), new { Id = id, controller = "Tests" }, id);
         }
 
         [HttpPut]

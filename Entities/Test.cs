@@ -6,5 +6,8 @@
         public string Name { get; set; }
         public int Price { get; set; }
 
+        public long? ReceptionId { get; set; }
+        public Reception Reception { get; set; }
+
     }
 }

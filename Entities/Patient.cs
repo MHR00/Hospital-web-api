@@ -1,4 +1,6 @@
-﻿namespace Hospital.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Hospital.Entities
 {
     public class Patient
     {
@@ -10,8 +12,13 @@
 
         public long Mobile { get; set; }
 
+
+
+
         public List<Doctor> Doctors { get; set; }
 
-        public long DoctersId { get; set; }
+        //public virtual Doctor Docter { get; set; }
+
+        //public long DoctorsId { get; set; }
     }
 }
