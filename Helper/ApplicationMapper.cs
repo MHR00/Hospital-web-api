@@ -10,16 +10,22 @@ namespace Hospital.Helper
         {
             // Patient
             CreateMap<Patient, PatientDto>();
-            CreateMap<Patient, CreatePatientDto>();
+
 
             //Doctor
-            //CreateMap<Doctor, DoctorDto>();
+            CreateMap<Doctor, ShowDoctorNameDto>();
 
 
-            
-                //CreateMap<Doctor, DoctorDto>().IncludeMembers(s => s.Patients);
-                //CreateMap<Patient, DoctorDto>(MemberList.None);
-          
+
+
+
+
+
+
+
+            //CreateMap<Doctor, DoctorDto>().IncludeMembers(s => s.Patients);
+            //CreateMap<Patient, DoctorDto>(MemberList.None);
+
 
 
 

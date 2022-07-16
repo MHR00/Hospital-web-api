@@ -12,11 +12,7 @@ namespace Hospital.Entities
        
        public List<Patient> Patients { get; set; }  
 
-       
-
-        //public virtual Patient Patient { get; set; }
-
-        //public long PatientId { get; set; }
+      
 
     }
 }

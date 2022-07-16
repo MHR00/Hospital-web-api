@@ -11,6 +11,12 @@ namespace Hospital.Dtos
 
         public List<Patient> Patients { get; set; }
 
+
+    }
+
+    public class ShowDoctorNameDto
+    {
+        public string Name { get; set; }    
     }
 
     public class DoctorListAndPatientCount
@@ -19,6 +25,8 @@ namespace Hospital.Dtos
         public List<Patient> Patients { get; set; }
         
     }
+
+    
 
     public class CreateDoctorDto
     {
