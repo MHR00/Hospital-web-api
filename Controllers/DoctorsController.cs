@@ -56,8 +56,6 @@ namespace Hospital.Controllers
         {
             var patientList = await _context.Doctors
                 .Include(t => t.Patients)
-             
-              
                 .ToListAsync();
 
             if (patientList == null)

@@ -10,18 +10,18 @@ namespace Hospital.Validator
         {
 
             RuleFor(t => t.Name).NotEmpty().WithMessage("نام بیمه را وارد کنید ");
+            RuleFor(t => t.Discount).NotEmpty();
+            When(c => c.Discount > c.DiscountCeiling, () =>
+            {
+                RuleFor(c => c.Discount).Equal(c => c.DiscountCeiling).WithMessage("مقدار تخفیف از سقف میزان پرداخت بیش تر است");
+            });
 
 
-    
 
-            //When(c => c.Discount > c.DiscountCeiling, () =>
-            //{
-            //    RuleFor(c => c.Discount).Equal(c=>c.DiscountCeiling).WithMessage("مقدار تخفیف از سقف میزان پرداخت بیش تر است");
-            //});
-                
 
-            
-         
+
+
+
         }
     }
 }
